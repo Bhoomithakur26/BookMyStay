@@ -482,3 +482,26 @@ class BookingReportService {
         System.out.println("Total Bookings: " + history.getBookings().size());
     }
 }
+class ReservationValidator {
+
+    public void validateReservation(String guestName, String roomType, RoomInventory inventory)
+            throws InvalidBookingException {
+
+        // Validate guest name
+        if (guestName == null || guestName.trim().isEmpty()) {
+            throw new InvalidBookingException("Guest name cannot be empty.");
+        }
+
+        // Validate room type
+        if (roomType == null || roomType.trim().isEmpty()) {
+            throw new InvalidBookingException("Room type must be specified.");
+        }
+
+        // Validate inventory availability
+        int available = inventory.getAvailability(roomType);
+
+        if (available <= 0) {
+            throw new InvalidBookingException("No available rooms for type: " + roomType);
+        }
+    }
+}
