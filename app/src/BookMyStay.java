@@ -382,3 +382,65 @@ class RoomAllocationService {
         return roomType + "-" + count;
     }
 }
+class AddOnService {
+
+    private String serviceName;
+    private double price;
+
+    public AddOnService(String serviceName, double price) {
+        this.serviceName = serviceName;
+        this.price = price;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+}
+import java.util.*;
+
+class AddOnServiceManager {
+
+    private Map<String, List<AddOnService>> reservationServices;
+
+    public AddOnServiceManager() {
+        reservationServices = new HashMap<>();
+    }
+
+    public void addService(String reservationId, AddOnService service) {
+
+        reservationServices
+                .computeIfAbsent(reservationId, k -> new ArrayList<>())
+                .add(service);
+    }
+
+    public double calculateTotalCost(String reservationId) {
+
+        double total = 0;
+
+        List<AddOnService> services =
+                reservationServices.getOrDefault(reservationId, new ArrayList<>());
+
+        for (AddOnService s : services) {
+            total += s.getPrice();
+        }
+
+        return total;
+    }
+
+    public void displayServices(String reservationId) {
+
+        List<AddOnService> services =
+                reservationServices.getOrDefault(reservationId, new ArrayList<>());
+
+        for (AddOnService s : services) {
+            System.out.println("Service: " + s.getServiceName() +
+                    ", Cost: " + s.getPrice());
+        }
+
+        System.out.println("Total Add-On Cost: " + calculateTotalCost(reservationId));
+    }
+}
